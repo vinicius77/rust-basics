@@ -1,37 +1,48 @@
 #![allow(unused)]
 
+/** Same as
+ * use std::cmp::Ordering
+ * use std::io */
+use rand::Rng;
+use std::{cmp::Ordering, io};
+
+const MAX_ROUNDS: i32 = 5;
+
 fn main() {
-    println!("Hello, world! :)");
+    // generate random number
+    let secret = rand::thread_rng().gen_range(1..91);
+    let mut rounds = 5;
 
-    // immutable string
-    let imu_string: String = String::from("Vinicius");
+    loop {
+        if (rounds <= 0) {
+            println!("The secret value was: {}", &secret);
+            break;
+        }
 
-    // mutable string
-    let mut mutable_str: String = String::from("mutable");
-    mutable_str = String::from("changed");
+        println!("Rounds remaining {}/{}", &rounds, &MAX_ROUNDS);
+        // Ask user a number
+        println!("Please enter a number: ");
+        // Read user's input
+        let mut guess = String::new();
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("Failed to read line"); // panik if error
 
-    // & pass the reference for the function not
-    // the ownership of the variable
-    println!("Imutable str {}", &imu_string);
+        // Verify user's number and tell
 
-    // if & is not passed, the imu_string cannot be
-    // reused anywhere in the application e.g. below
-    println!("Mutable string {} and {}", mutable_str, imu_string);
-    println!(
-        "Cannot be reused {}",
-        mutable_str /*ERROR:, imu_string*/
-    );
+        /** Shadowing previous variable */
+        let guess: i32 = guess.trim().parse().expect("Please type a number");
+        println!("Your guess is: {}", &guess);
 
-    say_hello(&mutable_str);
-    say_hello(&mutable_str);
-}
-
-// Line 1 removes the unused warning
-fn warning_example() {
-    println!("!Warning!");
-}
-
-// reference not ownership (&)
-fn say_hello(name: &String) {
-    println!("Hello, {}", name);
+        match guess.cmp(&secret) {
+            Ordering::Less => println!("Too small.\n"),
+            Ordering::Greater => println!("Too big\n"),
+            Ordering::Equal => {
+                println!("You won! \n");
+                break;
+            }
+        }
+        rounds -= 1;
+    }
+    println!("Thanks por playing!!\n")
 }
