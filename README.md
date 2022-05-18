@@ -27,3 +27,17 @@ cargo watch -q -c -x 'run -q'
 ```
 #![allow(unused)]
 ```
+
+### Running examples from `examples` directory
+
+- `cargo run --example` singular + `file name`
+
+```
+cargo run --example variable
+```
+
+Same for **cargo watch**.
+
+```
+cargo watch -c -q -x 'run -q --example variables'
+```
